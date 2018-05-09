@@ -28,7 +28,7 @@ allegro = Allegro(client_id=<CLIENT_ID>,
                   sandbox=True)
 ```
 
-Jeżeli chcemy by klient przeprowadził nas przez cały OAuth2 flow, należy skorzystać z metody `sign_id()` klasy `Allegro`
+Jeżeli chcemy by klient przeprowadził nas przez cały OAuth2 flow, należy skorzystać z metody `sign_in()` klasy `Allegro`
 
 ```python
 from allegroapi import Allegro
