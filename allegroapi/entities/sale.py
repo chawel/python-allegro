@@ -11,6 +11,8 @@ from __future__ import unicode_literals
 from ..base import BaseApi
 from .saleoffers import SaleOffers
 from .salecategories import SaleCategories
+from .saleshippingrates import SaleShippingRates
+from .saleimages import SaleImages
 
 
 class Sale(BaseApi):
@@ -25,3 +27,5 @@ class Sale(BaseApi):
         self.endpoint = 'sale'
         self.offers = SaleOffers(self)
         self.categories = SaleCategories(self)
+        self.shipping_rates = SaleShippingRates(self)
+        self.images = SaleImages(self)
