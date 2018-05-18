@@ -72,7 +72,8 @@ class AllegroClient(object):
 
         self.auth_handler = AllegroAuthHandler(client_id, client_secret, api_key,
                                                self.auth_url, redirect_uri,
-                                               access_token, refresh_token)
+                                               access_token=access_token,
+                                               refresh_token=refresh_token)
 
         # Get authentication object (session headers)
         self.auth = self.auth_handler.apply_auth()
@@ -104,7 +105,7 @@ class AllegroClient(object):
         headers = dict()
         headers['charset'] = 'utf-8'
         headers['Accept-Language'] = 'pl-PL'
-        headers['Content-Type'] = 'application/json'
+        headers['Content-type'] = 'application/json'
         headers['Accept'] = 'application/vnd.allegro.public.v1+json'
 
         return headers
@@ -117,6 +118,9 @@ class AllegroClient(object):
 
         if kwargs.get('json'):
             _logger.info('PAYLOAD: {json}'.format(**kwargs))
+
+        if kwargs.get('headers'):
+            _logger.info('PAYLOAD: {headers}'.format(**kwargs))
 
         try:
             response = requests.request(**kwargs)
@@ -148,13 +152,15 @@ class AllegroClient(object):
 
             return response
 
-    def _post(self, url, data=None, headers=None):
+    def _post(self, url, json=None, headers=None, data=None, files=None):
         """
         Handle authenticated POST requests
 
         :param url: The url for the endpoint
         :type url: :py:class:`str`
-        :param data: The request body parameters
+        :param json: The request body to be converted to json
+        :type json: :py:data:`none` or :py:class:`dict`
+        :param data: The request body data
         :type data: :py:data:`none` or :py:class:`dict`
         :param headers: Update headers with provided in this parameter (for this request only)
         :type headers: :py:data:`none` or :py:class:`dict`
@@ -173,11 +179,13 @@ class AllegroClient(object):
         r = self._make_request(**dict(
             method='POST',
             url=url,
-            json=data,
+            json=json,
+            data=data,
             auth=self.auth,
             timeout=self.timeout,
             hooks=self.request_hooks,
-            headers=_headers
+            headers=_headers,
+            files=files
         ))
 
         if r.status_code == 204:
@@ -258,13 +266,15 @@ class AllegroClient(object):
 
         return r.json()
 
-    def _patch(self, url, data=None, headers=None):
+    def _patch(self, url, json=None, headers=None, data=None):
         """
         Handle authenticated PATCH requests
 
         :param url: The url for the endpoint
         :type url: :py:class:`str`
-        :param data: The request body parameters
+        :param json: The request body to be converted to json
+        :type json: :py:data:`none` or :py:class:`dict`
+        :param data: The request body data
         :type data: :py:data:`none` or :py:class:`dict`
         :param headers: Update headers with provided in this parameter (for this request only)
         :type headers: :py:data:`none` or :py:class:`dict`
@@ -283,7 +293,8 @@ class AllegroClient(object):
         r = self._make_request(**dict(
             method='PATCH',
             url=url,
-            json=data,
+            json=json,
+            data=data,
             auth=self.auth,
             timeout=self.timeout,
             hooks=self.request_hooks,
@@ -295,13 +306,15 @@ class AllegroClient(object):
 
         return r.json()
 
-    def _put(self, url, data=None, headers=None):
+    def _put(self, url, json=None, headers=None, data=None):
         """
         Handle authenticated PUT requests
 
         :param url: The url for the endpoint
         :type url: :py:class:`str`
-        :param data: The request body parameters
+        :param json: The request body to be converted to json
+        :type json: :py:data:`none` or :py:class:`dict`
+        :param data: The request body data
         :type data: :py:data:`none` or :py:class:`dict`
         :param headers: Update headers with provided in this parameter (for this request only)
         :type headers: :py:data:`none` or :py:class:`dict`
@@ -320,7 +333,8 @@ class AllegroClient(object):
         r = self._make_request(**dict(
             method='PUT',
             url=url,
-            json=data,
+            json=json,
+            data=data,
             auth=self.auth,
             timeout=self.timeout,
             hooks=self.request_hooks,
