@@ -141,9 +141,10 @@ class AllegroClient(object):
                 self.auth_handler.refresh_access_token()
                 self.auth = self.auth_handler.apply_auth()
 
-                # ...and resend last request
-                self._make_request(tries=_tries, **kwargs)
-                # return ?
+                # ...and resend last request with new auth
+                kwargs['auth'] = self.auth
+                return self._make_request(tries=_tries, **kwargs)
+
             if response.status_code >= 400:
                 if response.status_code == 404:
                     raise AllegroError("404 Not Found")
