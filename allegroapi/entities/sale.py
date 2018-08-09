@@ -13,6 +13,8 @@ from .saleoffers import SaleOffers
 from .salecategories import SaleCategories
 from .saleshippingrates import SaleShippingRates
 from .saleimages import SaleImages
+from .saleofferpublicationcommands import SaleOfferPublicationCommands
+from .saleoffervariants import SaleOfferVariants
 
 
 class Sale(BaseApi):
@@ -29,3 +31,6 @@ class Sale(BaseApi):
         self.categories = SaleCategories(self)
         self.shipping_rates = SaleShippingRates(self)
         self.images = SaleImages(self)
+        self.offer_publication_commands = SaleOfferPublicationCommands(self)
+        self.offer_variants = SaleOfferVariants(self)
+
