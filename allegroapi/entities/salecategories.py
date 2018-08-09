@@ -43,19 +43,23 @@ class SaleCategories(BaseApi):
         self.parent_id = None
         return self._a_client._get(url=self._build_path(category_id), headers=self._headers)
 
-    def all(self, parent_id=None):
+    def all(self, parent_id=None, limit=100, offset=0):
         """
         Get a list of categories
 
         :param parent_id: The unique id (UUID) for the parent category.
         :type parent_id: :py:class:`str`
+        :param limit: Limit for page
+        :type limit: :py:class:`int`
+        :param offset: Offset position
+        :type offset: :py:class:`int`
         :return: The JSON response from API or error or None (if 204)
         :rtype: :py:class:`dict` or :py:data:`none`
         """
 
         self.parent_id = parent_id
         self.category_id = None
-        _params = {'parent.id': parent_id}
+        _params = {'parent.id': parent_id, 'limit': limit, 'offset': offset}
         # TODO: Maybe iterate or pagination?
         return self._a_client._get(url=self._build_path(), params=_params, headers=self._headers)
 
