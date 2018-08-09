@@ -24,9 +24,9 @@ class AllegroClient(object):
     """
     Core class used to connect and handle basic communication with Allegro.pl REST API
     """
-    def __init__(self, client_id, client_secret, api_key, redirect_uri, sandbox=True,
+    def __init__(self, client_id, client_secret, redirect_uri, sandbox=True, api_key=None,
                  timeout=None, request_headers=None, request_hooks=None,
-                 access_token=None, refresh_token=None):
+                 access_token=None, refresh_token=None, on_token_refresh_hook=None):
         """
         Initialize the class with your client_id, client_secret, api_key, redirect_uri
 
@@ -40,7 +40,7 @@ class AllegroClient(object):
         :type client_id: :py:class:`str`
         :param client_secret: Client Secret
         :type client_secret: :py:class:`str`
-        :param api_key: API Key
+        :param api_key: API Key (deprecated - not used)
         :type api_key: :py:class:`str`
         :param redirect_uri: Redirect URI
         :type redirect_uri: :py:class:`str`
@@ -56,6 +56,9 @@ class AllegroClient(object):
         :type access_token: :py:class:`str`
         :param refresh_token: Refresh Token (provide if you wish to use automatic refresh function)
         :type refresh_token: :py:class:`str`
+        :param on_token_refresh_hook: Pass here function with 2 parameters (access_token, refresh_token)
+            to be executed every time token has been refreshed
+        :type on_token_refresh_hook: func(access_token, refresh_token)
         """
 
         # Use super() even for parent class (that inherits from object)
@@ -70,8 +73,11 @@ class AllegroClient(object):
             self.base_url = API_URL
             self.auth_url = OAUTH_URL
 
-        self.auth_handler = AllegroAuthHandler(client_id, client_secret, api_key,
-                                               self.auth_url, redirect_uri,
+        self.auth_handler = AllegroAuthHandler(client_id=client_id,
+                                               client_secret=client_secret,
+                                               api_auth_url=self.auth_url,
+                                               redirect_uri=redirect_uri,
+                                               api_key=api_key,
                                                access_token=access_token,
                                                refresh_token=refresh_token)
 
@@ -85,6 +91,8 @@ class AllegroClient(object):
 
         if isinstance(request_headers, dict):
             self.request_headers.update(request_headers)
+
+        self._on_token_refresh_hook = on_token_refresh_hook
 
     def sign_in(self):
         """
@@ -140,6 +148,11 @@ class AllegroClient(object):
                 _logger.info(u'Response 401: Refreshing token....')
                 self.auth_handler.refresh_access_token()
                 self.auth = self.auth_handler.apply_auth()
+
+                # On refresh callback
+                if self._on_token_refresh_hook:
+                    self._on_token_refresh_hook(self.auth_handler.access_token,
+                                                self.auth_handler.refresh_token)
 
                 # ...and resend last request with new auth
                 kwargs['auth'] = self.auth
