@@ -33,7 +33,7 @@ class OAuth2Bearer(requests.auth.AuthBase):
         """
         Authorize with the access token and api_key provided in __init__
         """
-        r.headers['Api-Key'] = self._api_key
+        # r.headers['Api-Key'] = self._api_key
         r.headers['Authorization'] = "Bearer {}".format(self._access_token)
 
         return r
@@ -65,7 +65,7 @@ class AllegroAuthHandler(object):
     Documentation: https://developer.allegro.pl/auth/
     """
 
-    def __init__(self, client_id, client_secret, api_key, api_auth_url, redirect_uri,
+    def __init__(self, client_id, client_secret, api_auth_url, redirect_uri, api_key=None,
                  access_token=None, refresh_token=None, token_expires_in=None):
         """
         Initialize the class with required client_id, api_key, api_auth_url and redirect_uri.
@@ -74,7 +74,7 @@ class AllegroAuthHandler(object):
         :type client_id: :py:class:`str`
         :param client_secret: Client_secret
         :type client_secret: :py:class:`str`
-        :param api_key: Api_key
+        :param api_key: Api_key (deprecated - not used)
         :type api_key: :py:class:`str`
         :param api_auth_url: URL to Allegro REST API Auth endpoint
         :type api_auth_url: :py:class:`str`
@@ -103,7 +103,6 @@ class AllegroAuthHandler(object):
         # Just in case requote to ensure correct url format
         return requests.utils.requote_uri(base_url.format(auth_url=self._auth_url,
                                                           client_id=self._id,
-                                                          api_key=self._api_key,
                                                           redirect_uri=self._redirect_uri))
 
     def fetch_oauth_code(self):
@@ -146,7 +145,6 @@ class AllegroAuthHandler(object):
 
         access_token_data = {'grant_type': 'authorization_code',
                              'code': access_code,
-                             'api-key': self._api_key,
                              'redirect_uri': self._redirect_uri
                              }
 
@@ -180,16 +178,15 @@ class AllegroAuthHandler(object):
 
         _url = self._auth_url + '/token'
 
-        access_token_data = {'grant_type': 'refresh_token',
-                             'refresh_token': _refresh_token,
-                             'api-key': self._api_key,
-                             'redirect_uri': self._redirect_uri
-                             }
+        refresh_token_data = {'grant_type': 'refresh_token',
+                              'refresh_token': _refresh_token,
+                              'redirect_uri': self._redirect_uri
+                              }
 
         try:
             r = requests.post(url=_url,
                               auth=HTTPBasicAuth(self._id, self._secret),
-                              data=access_token_data)
+                              data=refresh_token_data)
         except requests.exceptions.RequestException as e:
             raise e
         else:
