@@ -25,13 +25,11 @@ class SaleImages(BaseApi):
         self._headers = {'Accept': 'application/vnd.allegro.beta.v1+json',
                          'Content-type': 'image/jpeg'}
 
-    def upload(self, image_name, image_location, image_type='JPG'):
+    def upload(self, image_location, image_type='JPG'):
         """
         Upload local image
-        ex. upload("1.jpg", "/imgs/1.jpg", "JPG")
+        ex. upload("/imgs/1.jpg", "JPG")
 
-        :param image_name: The name of image file
-        :type image_name: :py:class:`str`
         :param image_location: The location of image file (must not be URL but local!)
         :type image_location: :py:class:`str`
         :param image_type: (JPG, PNG, GIF) Image format for proper headers
