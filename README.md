@@ -21,8 +21,7 @@ from allegroapi import Allegro
 
 allegro = Allegro(client_id=<CLIENT_ID>, 
                   client_secret=<CLIENT_SECRET>, 
-                  api_key=<API_KEY>, 
-                  redirect_uri=<REDIRECT_URI>, 
+                  redirect_uri=<REDIRECT_URI>,  # np. "http://localhost:80"
                   access_token=<ACCESS_TOKEN>,
                   refresh_token=<REFRESH_TOKEN>,
                   sandbox=True)
@@ -35,8 +34,7 @@ from allegroapi import Allegro
 
 allegro = Allegro(client_id=<CLIENT_ID>, 
                   client_secret=<CLIENT_SECRET>, 
-                  api_key=<API_KEY>, 
-                  redirect_uri=<REDIRECT_URI>, 
+                  redirect_uri=<REDIRECT_URI>,  # np. "http://localhost:80"
                   sandbox=True)
               
 allegro.sign_in()
