@@ -21,8 +21,8 @@ class SaleImages(BaseApi):
         super(SaleImages, self).__init__(*args, **kwargs)
         self.endpoint = 'sale/images'
 
-        # Custom header for this endpoint (beta)
-        self._headers = {'Accept': 'application/vnd.allegro.beta.v1+json',
+        # Custom header for this endpoint
+        self._headers = {'Accept': 'application/vnd.allegro.public.v1+json',
                          'Content-type': 'image/jpeg'}
 
     def upload(self, image_location, image_type='JPG'):

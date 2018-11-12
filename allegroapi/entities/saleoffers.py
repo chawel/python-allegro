@@ -22,9 +22,9 @@ class SaleOffers(BaseApi):
         self.endpoint = 'sale/offers'
         self.offer_id = None
 
-        # Custom header for this endpoint (beta)
-        self._headers = {'Accept': 'application/vnd.allegro.beta.v1+json',
-                         'Content-type': 'application/vnd.allegro.beta.v1+json'}
+        # Custom header for this endpoint
+        self._headers = {'Accept': 'application/vnd.allegro.public.v1+json',
+                         'Content-type': 'application/vnd.allegro.public.v1+json'}
 
     def get(self, offer_id):
         """

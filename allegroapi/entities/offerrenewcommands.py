@@ -23,7 +23,7 @@ class OfferRenewCommands(BaseApi):
         self.command_uuid = None
         self.offer_id = None
 
-        # Custom header for this endpoint (beta)
+        # Custom header for this endpoint
         self._headers = {'Accept': 'application/vnd.allegro.public.v1+json',
                          'Content-type': 'application/vnd.allegro.public.v1+json'}
 

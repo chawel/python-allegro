@@ -22,7 +22,7 @@ class AfterSaleServiceConditionReturnPolicies(BaseApi):
         self.endpoint = '/after-sales-service-conditions/return-policies'
         self.seller_id = None
 
-        # Custom header for this endpoint (beta)
+        # Custom header for this endpoint
         self._headers = {'Accept': 'application/vnd.allegro.public.v1+json',
                          'Content-type': 'application/vnd.allegro.public.v1+json'}
 
