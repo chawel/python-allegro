@@ -98,7 +98,7 @@ class AllegroAuthHandler(object):
         :return: URI for authentication
         :rtype: :py:class:`str`
         """
-        base_url = """{auth_url}/authorize?response_type=code&client_id={client_id}&api-key={api_key}&redirect_uri={redirect_uri}"""
+        base_url = """{auth_url}/authorize?response_type=code&client_id={client_id}&redirect_uri={redirect_uri}"""
 
         # Just in case requote to ensure correct url format
         return requests.utils.requote_uri(base_url.format(auth_url=self._auth_url,
