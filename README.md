@@ -9,7 +9,7 @@ Nie korzysta z magii, każdy endpoint jest zdefiniowany.
 Obsługuje autentykację OAuth2, automatycznie odświeża token oraz obługuje metody CRUD dla zasobów.
 
 ## Instalacja
-Będąc w katalogu `python-allegro`, wystaczy polecenie: 
+Będąc w katalogu w którym jest plik `setup.py`, wystaczy polecenie: 
 ```bash
     pip install -e .
 ```
