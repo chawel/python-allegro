@@ -8,6 +8,12 @@ Prosty klient dla REST API platformy Allegro.pl napisany w Python z użyciem bib
 Nie korzysta z magii, każdy endpoint jest zdefiniowany.
 Obsługuje autentykację OAuth2, automatycznie odświeża token oraz obługuje metody CRUD dla zasobów.
 
+## Instalacja
+Będąc w katalogu `python-allegro`, wystaczy polecenie: 
+```bash
+    pip install -e .
+```
+
 ## Użycie
 Potrzebujemy danych dostępowych dla procesu uwierzytelnienia naszej aplikacji. Jak je zdobyć opisałem na blogu:
 [Allegro.pl REST API w Pythonie - wprowadzenie (OAuth)](https://cwsi.pl/ecommerce/allegro/allegro-pl-rest-api-w-pythonie-wprowadzenie/#wst%C4%99p)
