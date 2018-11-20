@@ -40,6 +40,42 @@ allegro = Allegro(client_id=<CLIENT_ID>,
 allegro.sign_in()
 ```
 
+#### Automatyczne odświeżanie tokena
+Można zdefiniować `callback` w przypadku wywołania się automatycznego odświeżenia tokena przez klienta.
+Klasa `Allegro` przy napotkaniu na kod odpowiedzi serwera `401 - Unauthorized` spróbuje automatycznie odświeżyć token - w przypadku sukcesu wywoła funkcję przekazaną w parametrze `on_token_refresh_hook`.
+Rozwiązanie jest szczególnie przydatne, kiedy przechowujemy `access_token` w bezpiecznym miejscu (np. baza danych) i używamy go stale do uwierzytelnienia.
+
+Funkcja ta powina konsumować 2 parametry `func(access_token, refresh_token)`.
+
+```python
+from allegroapi import Allegro
+
+# ex. save to file
+def save_token_on_refresh(access_token, refresh_token):
+    with open('insecure_tokens.txt', 'w') as token_file:
+        tokens = access_token + '#' + refresh_token
+        token_file.write(tokens)
+        
+# ex. read saved token from file
+def load_token_on_start():
+    with open('insecure_tokens.txt', 'r') as token_file:
+        tokens = f.readline()
+        
+    return {'access_token': tokens.split('#')[0], 'refresh_token': tokens.split('#')[1]}
+    
+_token_container = load_token_on_start()
+
+allegro = Allegro(client_id=<CLIENT_ID>, 
+                  client_secret=<CLIENT_SECRET>, 
+                  redirect_uri=<REDIRECT_URI>,  # np. "http://localhost:80"
+                  access_token=_token_container.access_token,
+                  refresh_token=_token_container.refresh_token,
+                  on_token_refresh_hook=save_token_on_refresh
+                  sandbox=True)
+```
+
+
+
 ### Korzystanie z zasobów REST API
 Uwierzytelniony klient ma dostęp do zasobów REST API platformy Allegro.pl
 
