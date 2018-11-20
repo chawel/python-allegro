@@ -113,6 +113,6 @@ class SaleOffers(BaseApi):
           'limit': limit,
           'offset': offset
         }
-        return self._a_client._get(url=self._build_path(), params=_params, headers=self._headers)
+        return self._a_client._get(url=self._build_path(), params=_params, headers=_headers)
 
 
