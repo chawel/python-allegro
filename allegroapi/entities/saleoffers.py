@@ -81,4 +81,38 @@ class SaleOffers(BaseApi):
         else:
             self.offer_id = None
         return response
+    
+    def all(self, text_query=None, offer_status='ACTIVE', offer_format='BUY_NOW', limit=100, offset=0):
+        """
+        [BETA] Get list of offers from Your Allegro.pl account
+        
+        :param text_query: Search query (in offer title).
+        :type text_query: :py:class:`str
+        :param offer_status: Publication statuses may contain more than one comma separated values (ex. 'INACTIVE, ACTIVE, ACTIVATING, ENDED')
+        :type offer_status: :py:class:`str
+        :param offer_format: Selling mode may contain more than one comma separated values (ex. 'BUY_NOW, ADVERTISEMENT, AUCTION')
+        :type offer_format: :py:class:`str
+        :param limit: Limit for page
+        :type limit: :py:class:`int`
+        :param offset: Offset position
+        :type offset: :py:class:`int`
+        :return: The JSON response from API or error or None (if 204)
+        :rtype: :py:class:`dict` or :py:data:`none`
+        """
+        
+        _headers = {'Accept': 'application/vnd.allegro.beta.v1+json',
+                    'Content-type': 'application/vnd.allegro.beta.v1+json'}
+
+        _params = {
+          'name': text_query,
+          'publication.status': offer_status,
+          'sellingMode.type': offer_format,
+#           TODO: Implement more filters - not tested yet!
+#           'sellingMode.price.amount.gte': offer_min_price,
+#           'sellingMode.price.amount.lte': offer_max_price,
+          'limit': limit,
+          'offset': offset
+        }
+        return self._a_client._get(url=self._build_path(), params=_params, headers=self._headers)
+
 
