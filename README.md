@@ -65,7 +65,7 @@ def save_token_on_refresh(access_token, refresh_token):
 # ex. read saved token from file
 def load_token_on_start():
     with open('insecure_tokens.txt', 'r') as token_file:
-        tokens = f.readline()
+        tokens = token_file.readline()
         
     return {'access_token': tokens.split('#')[0], 'refresh_token': tokens.split('#')[1]}
     
