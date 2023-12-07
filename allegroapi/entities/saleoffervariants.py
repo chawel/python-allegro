@@ -39,6 +39,58 @@ class SaleOfferVariants(BaseApi):
         self.set_id = set_id
         return self._a_client._get(url=self._build_path(set_id), headers=self._headers)
 
+    def _list_request(self, limit=50, offset=0):
+        """
+        Single request to list up to 50 variant sets.
+        :param limit: Limit the number of offers in one response
+        :type limit: :py:class:`int`
+        :return: the JSON response from API or error or None (if 204)
+        :rtype: :py:class:`dict` or :py:data:`none`
+        """
+        return self._a_client._get(url=self._build_path(limit=limit, offset=offset), headers=self._headers)
+
+    def list(self, quantity: int=False):
+        """
+        Use this resource to get variant sets available for your Allegro account.
+        :param quantity: Quantity limit of variant sets to be returned
+        :type quantity: :py:class:`int`
+        :return: the JSON response from API or error or None (if 204)
+        :rtype: :py:class:`dict` or :py:data:`none`
+        """
+        limit = 50
+        initial_limit = 50
+        need_one_request = False
+
+        if quantity is not False:
+            if quantity < 10:
+                raise ValueError('quantity must be greater than 10')
+            if quantity < limit:
+                initial_limit = quantity
+                need_one_request = True
+
+        initial_response = self._list_request(initial_limit)
+
+        if need_one_request:
+            return initial_response
+
+        response_variant_sets_count = initial_response['count']
+
+        if quantity == 0:
+            requests_count = response_variant_sets_count // limit
+            last_request_limit = response_variant_sets_count % limit
+        else:
+            requests_count = quantity // limit
+            last_request_limit = quantity % limit
+
+        for i in range(1, requests_count+1):
+            offset = i*limit
+            if i == requests_count:
+                limit = last_request_limit
+            response = self._list_request(limit=limit, offset=offset)
+            initial_response['offerVariants'] += response['offerVariants']
+
+        return initial_response
+
     def create(self, set_id, body):
         """
         Use this resource to create or update variant set.
