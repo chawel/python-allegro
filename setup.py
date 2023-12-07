@@ -8,6 +8,6 @@ setup(
     version='0.0.1',    
     description='Simple wrapper (client) for Allegro.pl REST API written in Python (using requests)',
     url='https://github.com/chawel/python-allegro.git',
-    license=license,
+    license="MIT",
     packages=find_packages(exclude=('tests', 'docs')),
 )
